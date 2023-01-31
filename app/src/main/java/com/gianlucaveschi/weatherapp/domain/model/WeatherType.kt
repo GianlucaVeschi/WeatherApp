@@ -1,4 +1,4 @@
-package com.gianlucaveschi.weatherapp.domain.weather
+package com.gianlucaveschi.weatherapp.domain.model
 
 import androidx.annotation.DrawableRes
 import com.gianlucaveschi.weatherapp.R
@@ -117,6 +117,7 @@ sealed class WeatherType(
     )
 
     companion object {
+        // World Meteorological Organization
         fun fromWMO(code: Int): WeatherType {
             return when(code) {
                 0 -> ClearSky
