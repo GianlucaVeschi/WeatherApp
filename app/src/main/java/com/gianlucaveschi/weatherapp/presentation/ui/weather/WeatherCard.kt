@@ -44,7 +44,7 @@ fun WeatherCard(
                         )
                     }",
                     modifier = Modifier.align(Alignment.Start),
-                    color = Color.White
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Image(
@@ -56,13 +56,13 @@ fun WeatherCard(
                 Text(
                     text = "${data.temperatureCelsius}°C",
                     fontSize = 50.sp,
-                    color = Color.White
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = data.weatherType.weatherDesc,
                     fontSize = 20.sp,
-                    color = Color.White
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Row(
@@ -73,22 +73,22 @@ fun WeatherCard(
                         value = data.pressure.roundToInt(),
                         unit = "hpa",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_pressure),
-                        iconTint = Color.White,
+                        iconTint = Color.Black,
                         textStyle = TextStyle(color = Color.White)
                     )
                     WeatherDataDisplay(
                         value = data.humidity.roundToInt(),
                         unit = "%",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_drop),
-                        iconTint = Color.White,
-                        textStyle = TextStyle(color = Color.White)
+                        iconTint = Color.Black,
+                        textStyle = TextStyle(color = Color.Black)
                     )
                     WeatherDataDisplay(
                         value = data.windSpeed.roundToInt(),
                         unit = "km/h",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_wind),
-                        iconTint = Color.White,
-                        textStyle = TextStyle(color = Color.White)
+                        iconTint = Color.Black,
+                        textStyle = TextStyle(color = Color.Black)
                     )
                 }
             }

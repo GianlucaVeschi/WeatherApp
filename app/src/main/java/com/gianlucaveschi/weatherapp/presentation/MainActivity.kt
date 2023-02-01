@@ -16,12 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.gianlucaveschi.weatherapp.presentation.ui.theme.DarkBlue
-import com.gianlucaveschi.weatherapp.presentation.ui.theme.DeepBlue
+import com.gianlucaveschi.weatherapp.presentation.ui.theme.Purple200
 import com.gianlucaveschi.weatherapp.presentation.ui.theme.WeatherAppTheme
 import com.gianlucaveschi.weatherapp.presentation.ui.weather.WeatherCard
 import com.gianlucaveschi.weatherapp.presentation.ui.weather.WeatherForecast
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -51,13 +52,12 @@ class MainActivity : ComponentActivity() {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(DarkBlue)
+                                .background(Color.White)
                         ) {
                             WeatherCard(
                                 state = viewModel.state,
-                                backgroundColor = DeepBlue
+                                backgroundColor = Purple200
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
                             WeatherForecast(state = viewModel.state)
                         }
                         if (viewModel.state.isLoading) {

@@ -36,6 +36,7 @@ fun WeatherDataDisplay(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "$value$unit",
+            color = Color.Black,
             style = textStyle
         )
     }
