@@ -1,13 +1,9 @@
 package com.gianlucaveschi.weatherapp.presentation
 
-import android.app.Application
 import android.location.Address
-import android.location.Geocoder
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gianlucaveschi.weatherapp.domain.location.LocationTracker
@@ -16,7 +12,6 @@ import com.gianlucaveschi.weatherapp.domain.util.Resource
 import com.gianlucaveschi.weatherapp.presentation.ui.weather.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,36 +35,43 @@ class MainViewModel @Inject constructor(
                 isLoading = true,
                 error = null
             )
-            locationTracker.getCurrentLocation()?.let { location ->
-                val result = location.run {
-                    repository.getWeatherDataGen(latitude, longitude)
-                }
-                val addresses = location.run {
-                    locationTracker.getLocationAddress(latitude, longitude)
-                }
-                val cityName = getCityName(addresses)
-                when (result) {
-                    is Resource.Success -> {
+            when (val locationResource = locationTracker.getCurrentLocation()) {
+                is Resource.Success -> {
+                    locationResource.data?.run {
+                        val result = repository.getWeatherDataGen(latitude, longitude)
+                        val addresses = locationTracker.getLocationAddress(latitude, longitude)
+                        val cityName = getCityName(addresses)
+                        when (result) {
+                            is Resource.Success -> {
+                                state = state.copy(
+                                    location = cityName,
+                                    weatherInfo = result.data,
+                                    isLoading = false,
+                                    error = null
+                                )
+                            }
+                            is Resource.Error -> {
+                                state = state.copy(
+                                    weatherInfo = null,
+                                    isLoading = false,
+                                    error = result.message
+                                )
+                            }
+                        }
+                    } ?: run {
                         state = state.copy(
-                            location = cityName,
-                            weatherInfo = result.data,
                             isLoading = false,
-                            error = null
+                            error = "Couldn't retrieve location. Make sure to grant permission and enable GPS."
                         )
                     }
-                    is Resource.Error -> {
-                        state = state.copy(
-                            weatherInfo = null,
-                            isLoading = false,
-                            error = result.message
-                        )
-                    }
                 }
-            } ?: run {
-                state = state.copy(
-                    isLoading = false,
-                    error = "Couldn't retrieve location. Make sure to grant permission and enable GPS."
-                )
+                is Resource.Error -> {
+                    state = state.copy(
+                        weatherInfo = null,
+                        isLoading = false,
+                        error = locationResource.message
+                    )
+                }
             }
         }
     }

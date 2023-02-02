@@ -11,13 +11,13 @@ import android.location.LocationManager
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.gianlucaveschi.weatherapp.domain.location.LocationTracker
+import com.gianlucaveschi.weatherapp.domain.util.Resource
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-// TODO: Wrap response with Resource<...> 
 @ExperimentalCoroutinesApi
 class DefaultLocationTracker @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
@@ -25,7 +25,7 @@ class DefaultLocationTracker @Inject constructor(
     private val geocoder: Geocoder
 ) : LocationTracker {
 
-    override suspend fun getCurrentLocation(): Location? {
+    override suspend fun getCurrentLocation(): Resource<Location?> {
         val hasAccessFineLocationPermission = ContextCompat.checkSelfPermission(
             application,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -41,7 +41,7 @@ class DefaultLocationTracker @Inject constructor(
         val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!hasAccessCoarseLocationPermission || !hasAccessFineLocationPermission || !isGpsEnabled) {
-            return null
+            return Resource.Error("Could not get location")
         }
 
         // Convert callback into cancellable coroutine
@@ -49,17 +49,17 @@ class DefaultLocationTracker @Inject constructor(
             locationClient.lastLocation.apply {
                 if (isComplete) {
                     if (isSuccessful) {
-                        cont.resume(result)
+                        cont.resume(Resource.Success(result))
                     } else {
-                        cont.resume(null)
+                        cont.resume(Resource.Error("Couldn't get location"))
                     }
                     return@suspendCancellableCoroutine
                 }
                 addOnSuccessListener {
-                    cont.resume(it)
+                    cont.resume(Resource.Success(result))
                 }
                 addOnFailureListener {
-                    cont.resume(null)
+                    cont.resume(Resource.Error("Couldn't get location ${it.message}"))
                 }
                 addOnCanceledListener {
                     cont.cancel()
