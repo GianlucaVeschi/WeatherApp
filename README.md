@@ -20,6 +20,9 @@ A cool modern weather application build with\
 * [retrofit](retrofit)
 * [MVVM](MVVM)
 
+## Architecture 
+![image](https://user-images.githubusercontent.com/19254758/216398560-53adf558-7581-4dde-9eca-f47586420582.png)
+
 ## Authors
 
 * **Gianluca Veschi** - *Software Engineer* - [Gianluca Veschi](https://github.com/GianlucaVeschi/) - *Build the project*
