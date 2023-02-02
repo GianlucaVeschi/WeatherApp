@@ -1,16 +1,16 @@
 package com.gianlucaveschi.weatherapp.data.remote
 
-import com.gianlucaveschi.weatherapp.data.model.WeatherApiModel
+import com.gianlucaveschi.weatherapp.data.weather.WeatherDataApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherApi {
 
     @GET(WEATHER_ENDPOINT)
-    suspend fun getWeatherData(
+    suspend fun getWeatherDataGenModel(
         @Query("latitude") lat: Double,
         @Query("longitude") long: Double
-    ): WeatherApiModel
+    ): WeatherDataApiResponse
 
     companion object {
         const val WEATHER_ENDPOINT =

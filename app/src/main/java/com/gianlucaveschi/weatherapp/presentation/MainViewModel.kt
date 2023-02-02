@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(
             )
             locationTracker.getCurrentLocation()?.let { location ->
                 val result = location.run {
-                    repository.getWeatherData(latitude, longitude)
+                    repository.getWeatherDataGen(latitude, longitude)
                 }
                 val addresses = location.run {
                     locationTracker.getLocationAddress(latitude, longitude)
