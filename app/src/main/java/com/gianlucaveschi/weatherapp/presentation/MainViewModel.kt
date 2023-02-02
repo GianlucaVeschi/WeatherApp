@@ -1,9 +1,6 @@
 package com.gianlucaveschi.weatherapp.presentation
 
 import android.location.Address
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gianlucaveschi.weatherapp.domain.location.LocationTracker
@@ -11,6 +8,8 @@ import com.gianlucaveschi.weatherapp.domain.repo.WeatherRepository
 import com.gianlucaveschi.weatherapp.domain.util.Resource
 import com.gianlucaveschi.weatherapp.presentation.ui.weather.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,18 +19,12 @@ class MainViewModel @Inject constructor(
     private val locationTracker: LocationTracker
 ) : ViewModel() {
 
-    // What is by?
-    // Why private set?
-    var state by mutableStateOf(WeatherState())
-        private set
-
-    // What is the difference?
-    // private val _state = mutableStateOf(WeatherState())
-    // val state2 = _state
+    private val _state = MutableStateFlow<WeatherState>(WeatherState(isLoading = true))
+    val state = _state.asStateFlow()
 
     fun loadWeatherInfo() {
         viewModelScope.launch {
-            state = state.copy(
+            _state.value = _state.value.copy(
                 isLoading = true,
                 error = null
             )
@@ -43,7 +36,7 @@ class MainViewModel @Inject constructor(
                         val cityName = getCityName(addresses)
                         when (result) {
                             is Resource.Success -> {
-                                state = state.copy(
+                                _state.value = _state.value.copy(
                                     location = cityName,
                                     weatherInfo = result.data,
                                     isLoading = false,
@@ -51,7 +44,7 @@ class MainViewModel @Inject constructor(
                                 )
                             }
                             is Resource.Error -> {
-                                state = state.copy(
+                                _state.value = _state.value.copy(
                                     weatherInfo = null,
                                     isLoading = false,
                                     error = result.message
@@ -59,14 +52,14 @@ class MainViewModel @Inject constructor(
                             }
                         }
                     } ?: run {
-                        state = state.copy(
+                        _state.value = _state.value.copy(
                             isLoading = false,
                             error = "Couldn't retrieve location. Make sure to grant permission and enable GPS."
                         )
                     }
                 }
                 is Resource.Error -> {
-                    state = state.copy(
+                    _state.value = _state.value.copy(
                         weatherInfo = null,
                         isLoading = false,
                         error = locationResource.message

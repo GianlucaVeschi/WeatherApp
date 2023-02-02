@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.gianlucaveschi.weatherapp.presentation.ui.theme.WeatherAppTheme
 import com.gianlucaveschi.weatherapp.presentation.ui.weather.WeatherAppMainLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +35,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             WeatherAppTheme {
                 WeatherAppTheme {
-                    WeatherAppMainLayout(viewModel.state)
+                    val state by viewModel.state.collectAsState()
+                    WeatherAppMainLayout(state)
+                    //HomeScreen(viewModel)
                 }
             }
         }
