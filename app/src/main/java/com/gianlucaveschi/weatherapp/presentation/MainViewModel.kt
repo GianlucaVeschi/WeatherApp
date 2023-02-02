@@ -1,8 +1,13 @@
 package com.gianlucaveschi.weatherapp.presentation
 
+import android.app.Application
+import android.location.Address
+import android.location.Geocoder
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gianlucaveschi.weatherapp.domain.location.LocationTracker
@@ -11,12 +16,14 @@ import com.gianlucaveschi.weatherapp.domain.util.Resource
 import com.gianlucaveschi.weatherapp.presentation.ui.weather.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: WeatherRepository,
-    private val locationTracker: LocationTracker
+    private val locationTracker: LocationTracker,
+    private val geocoder: Geocoder
 ) : ViewModel() {
 
     // What is by?
@@ -25,8 +32,8 @@ class MainViewModel @Inject constructor(
         private set
 
     // What is the difference?
-    private val _state = mutableStateOf(WeatherState())
-    val state2 = _state
+    // private val _state = mutableStateOf(WeatherState())
+    // val state2 = _state
 
     fun loadWeatherInfo() {
         viewModelScope.launch {
@@ -38,9 +45,14 @@ class MainViewModel @Inject constructor(
                 val result = repository.getWeatherData(
                     location.latitude, location.longitude
                 )
+                val cityName = getCityNameWithLocation(
+                    lat = location.latitude,
+                    long = location.longitude
+                )
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(
+                            location = cityName,
                             weatherInfo = result.data,
                             isLoading = false,
                             error = null
@@ -61,5 +73,14 @@ class MainViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun getCityNameWithLocation(lat: Double, long: Double) : String {
+        val addresses: List<Address> = geocoder.getFromLocation(lat, long, 1)
+        return if(addresses.isNotEmpty()) {
+            val cityName: String = addresses[0].locality
+            Log.d("MainViewModel", "getCityNameWithLocation: $cityName")
+            cityName
+        } else ""
     }
 }

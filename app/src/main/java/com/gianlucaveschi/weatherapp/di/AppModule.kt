@@ -1,6 +1,7 @@
 package com.gianlucaveschi.weatherapp.di
 
 import android.app.Application
+import android.location.Geocoder
 import com.gianlucaveschi.weatherapp.data.remote.WeatherApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -33,5 +34,13 @@ object AppModule {
         app: Application
     ): FusedLocationProviderClient {
         return LocationServices.getFusedLocationProviderClient(app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGeocoder(
+        app: Application
+    ): Geocoder {
+        return Geocoder(app)
     }
 }
