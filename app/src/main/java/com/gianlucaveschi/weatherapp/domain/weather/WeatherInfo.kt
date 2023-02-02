@@ -1,4 +1,4 @@
-package com.gianlucaveschi.weatherapp.domain.model
+package com.gianlucaveschi.weatherapp.domain.weather
 
 data class WeatherInfo(
     val weatherDataPerDay: Map<Int, List<WeatherData>>,

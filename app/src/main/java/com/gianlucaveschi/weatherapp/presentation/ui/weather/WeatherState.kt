@@ -1,6 +1,6 @@
 package com.gianlucaveschi.weatherapp.presentation.ui.weather
 
-import com.gianlucaveschi.weatherapp.domain.model.WeatherInfo
+import com.gianlucaveschi.weatherapp.domain.weather.WeatherInfo
 
 data class WeatherState(
     val location : String = "",

@@ -1,4 +1,4 @@
-package com.gianlucaveschi.weatherapp.domain.model
+package com.gianlucaveschi.weatherapp.domain.weather
 
 import java.time.LocalDateTime
 

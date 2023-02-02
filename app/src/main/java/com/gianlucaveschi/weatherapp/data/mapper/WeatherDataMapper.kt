@@ -1,9 +1,9 @@
 package com.gianlucaveschi.weatherapp.data.mapper
 
 import com.gianlucaveschi.weatherapp.data.weather.WeatherDataApiResponse
-import com.gianlucaveschi.weatherapp.domain.model.WeatherData
-import com.gianlucaveschi.weatherapp.domain.model.WeatherInfo
-import com.gianlucaveschi.weatherapp.domain.model.WeatherType
+import com.gianlucaveschi.weatherapp.domain.weather.WeatherData
+import com.gianlucaveschi.weatherapp.domain.weather.WeatherInfo
+import com.gianlucaveschi.weatherapp.domain.weather.WeatherType
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

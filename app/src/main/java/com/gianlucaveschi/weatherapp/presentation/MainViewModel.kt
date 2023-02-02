@@ -47,7 +47,7 @@ class MainViewModel @Inject constructor(
                 val addresses = location.run {
                     locationTracker.getLocationAddress(latitude, longitude)
                 }
-                val cityName = if (addresses.isNotEmpty()) addresses[0].locality else ""
+                val cityName = getCityName(addresses)
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(
@@ -73,4 +73,7 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getCityName(addresses: List<Address>): String =
+        if (addresses.isNotEmpty()) "${addresses[0].locality}, ${addresses[0].countryName}" else ""
 }

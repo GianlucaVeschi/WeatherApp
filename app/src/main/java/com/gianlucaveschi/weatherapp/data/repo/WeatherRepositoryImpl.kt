@@ -2,7 +2,7 @@ package com.gianlucaveschi.weatherapp.data.repo
 
 import com.gianlucaveschi.weatherapp.data.mapper.toWeatherInfo
 import com.gianlucaveschi.weatherapp.data.remote.WeatherApi
-import com.gianlucaveschi.weatherapp.domain.model.WeatherInfo
+import com.gianlucaveschi.weatherapp.domain.weather.WeatherInfo
 import com.gianlucaveschi.weatherapp.domain.repo.WeatherRepository
 import com.gianlucaveschi.weatherapp.domain.util.Resource
 import javax.inject.Inject
