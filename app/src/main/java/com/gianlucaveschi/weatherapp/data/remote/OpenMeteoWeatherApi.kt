@@ -4,7 +4,7 @@ import com.gianlucaveschi.weatherapp.data.weather.WeatherDataApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherApi {
+interface OpenMeteoWeatherApi {
 
     @GET(WEATHER_ENDPOINT)
     suspend fun getWeatherDataGenModel(

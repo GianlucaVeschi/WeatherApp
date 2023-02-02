@@ -2,7 +2,7 @@ package com.gianlucaveschi.weatherapp.di
 
 import android.app.Application
 import android.location.Geocoder
-import com.gianlucaveschi.weatherapp.data.remote.WeatherApi
+import com.gianlucaveschi.weatherapp.data.remote.OpenMeteoWeatherApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -20,7 +20,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWeatherApi(): WeatherApi {
+    fun provideWeatherApi(): OpenMeteoWeatherApi {
         return Retrofit.Builder()
             .baseUrl("https://api.open-meteo.com/")
             .addConverterFactory(MoshiConverterFactory.create())

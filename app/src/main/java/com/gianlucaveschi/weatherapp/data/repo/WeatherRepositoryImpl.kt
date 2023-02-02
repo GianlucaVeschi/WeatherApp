@@ -1,14 +1,14 @@
 package com.gianlucaveschi.weatherapp.data.repo
 
 import com.gianlucaveschi.weatherapp.data.mapper.toWeatherInfo
-import com.gianlucaveschi.weatherapp.data.remote.WeatherApi
+import com.gianlucaveschi.weatherapp.data.remote.OpenMeteoWeatherApi
 import com.gianlucaveschi.weatherapp.domain.weather.WeatherInfo
 import com.gianlucaveschi.weatherapp.domain.repo.WeatherRepository
 import com.gianlucaveschi.weatherapp.domain.util.Resource
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
-    private val api: WeatherApi
+    private val api: OpenMeteoWeatherApi
 ) : WeatherRepository {
 
     override suspend fun getWeatherDataGen(
