@@ -4,8 +4,11 @@ import android.Manifest
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.gianlucaveschi.weatherapp.domain.location.LocationTracker
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -18,7 +21,8 @@ import kotlin.coroutines.resume
 @ExperimentalCoroutinesApi
 class DefaultLocationTracker @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
-    private val application: Application
+    private val application: Application,
+    private val geocoder: Geocoder
 ) : LocationTracker {
 
     override suspend fun getCurrentLocation(): Location? {
@@ -62,5 +66,13 @@ class DefaultLocationTracker @Inject constructor(
                 }
             }
         }
+    }
+
+    override fun getLocationAddress(lat: Double, long: Double): List<Address> {
+        val addresses: List<Address> = geocoder.getFromLocation(lat, long, 1)
+        return if (addresses.isNotEmpty()) {
+            Log.d("DefaultLocationTracker", "getCityNameWithLocation: ${addresses[0]}")
+            addresses
+        } else listOf()
     }
 }

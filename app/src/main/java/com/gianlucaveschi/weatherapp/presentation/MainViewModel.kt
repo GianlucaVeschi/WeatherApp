@@ -22,8 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: WeatherRepository,
-    private val locationTracker: LocationTracker,
-    private val geocoder: Geocoder
+    private val locationTracker: LocationTracker
 ) : ViewModel() {
 
     // What is by?
@@ -42,13 +41,13 @@ class MainViewModel @Inject constructor(
                 error = null
             )
             locationTracker.getCurrentLocation()?.let { location ->
-                val result = repository.getWeatherData(
-                    location.latitude, location.longitude
-                )
-                val cityName = getCityNameWithLocation(
-                    lat = location.latitude,
-                    long = location.longitude
-                )
+                val result = location.run {
+                    repository.getWeatherData(latitude, longitude)
+                }
+                val addresses = location.run {
+                    locationTracker.getLocationAddress(latitude, longitude)
+                }
+                val cityName = if (addresses.isNotEmpty()) addresses[0].locality else ""
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(
@@ -73,14 +72,5 @@ class MainViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun getCityNameWithLocation(lat: Double, long: Double) : String {
-        val addresses: List<Address> = geocoder.getFromLocation(lat, long, 1)
-        return if(addresses.isNotEmpty()) {
-            val cityName: String = addresses[0].locality
-            Log.d("MainViewModel", "getCityNameWithLocation: $cityName")
-            cityName
-        } else ""
     }
 }
