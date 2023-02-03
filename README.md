@@ -25,10 +25,5 @@ A cool modern weather application build with\
 
 ## Authors
 
-* **Gianluca Veschi** - *Software Engineer* - [Gianluca Veschi](https://github.com/GianlucaVeschi/) - *Build the project*
-
-## Acknowledgements
-
-todo
- 
+* **Gianluca Veschi** - *Software Engineer* - [Gianluca Veschi](https://github.com/GianlucaVeschi/)
 
