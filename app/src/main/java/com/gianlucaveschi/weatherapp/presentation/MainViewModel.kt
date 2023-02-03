@@ -9,6 +9,7 @@ import com.gianlucaveschi.weatherapp.domain.interactor.GetLocationDetailsUseCase
 import com.gianlucaveschi.weatherapp.domain.location.LocationTracker
 import com.gianlucaveschi.weatherapp.domain.repo.WeatherRepository
 import com.gianlucaveschi.weatherapp.domain.util.Resource
+import com.gianlucaveschi.weatherapp.domain.weather.WeatherInfo
 import com.gianlucaveschi.weatherapp.presentation.ui.components.SearchState
 import com.gianlucaveschi.weatherapp.presentation.ui.weather.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,46 +36,26 @@ class MainViewModel @Inject constructor(
 
     fun loadLocalWeatherInfo() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(
-                isLoading = true,
-                error = null
-            )
+            updateLoadingState()
             when (val locationResource = locationTracker.getCurrentLocation()) {
                 is Resource.Success -> {
                     locationResource.data?.run {
                         val result = repository.getWeatherData(latitude, longitude)
                         val addresses = locationTracker.getLocationAddress(latitude, longitude)
-                        val cityName = getCityName(addresses)
                         when (result) {
                             is Resource.Success -> {
-                                _state.value = _state.value.copy(
-                                    location = cityName,
-                                    weatherInfo = result.data,
-                                    isLoading = false,
-                                    error = null
-                                )
+                                updateSuccessState(result, getCityName(addresses))
                             }
                             is Resource.Error -> {
-                                _state.value = _state.value.copy(
-                                    weatherInfo = null,
-                                    isLoading = false,
-                                    error = result.message
-                                )
+                                updateErrorState(result.message)
                             }
                         }
                     } ?: run {
-                        _state.value = _state.value.copy(
-                            isLoading = false,
-                            error = "Couldn't retrieve location. Make sure to grant permission and enable GPS."
-                        )
+                        updateErrorState("Couldn't retrieve location. Make sure to grant permission and enable GPS.")
                     }
                 }
                 is Resource.Error -> {
-                    _state.value = _state.value.copy(
-                        weatherInfo = null,
-                        isLoading = false,
-                        error = locationResource.message
-                    )
+                    updateErrorState(locationResource.message)
                 }
             }
         }
@@ -91,30 +72,45 @@ class MainViewModel @Inject constructor(
     fun onSearchClicked(query: String) {
         // Search weather for given country
         viewModelScope.launch {
-            _state.value = _state.value.copy(
-                isLoading = true,
-                error = null
-            )
+            updateLoadingState()
             when (val response = getLocationDetailsUseCase(query)) {
                 is Resource.Success -> {
-                    response.data?.run {
-                        _state.value = _state.value.copy(
-                            location = query,
-                            weatherInfo = this,
-                            isLoading = false,
-                            error = null
-                        )
-                    }
+                    updateSuccessState(response, query)
                 }
                 is Resource.Error -> {
-                    _state.value = _state.value.copy(
-                        weatherInfo = null,
-                        isLoading = false,
-                        error = response.message
-                    )
+                    updateErrorState(response.message)
                 }
             }
         }
+    }
+
+    private fun updateLoadingState() {
+        _state.value = _state.value.copy(
+            isLoading = true,
+            error = null
+        )
+    }
+
+    private fun updateSuccessState(
+        response: Resource<WeatherInfo>,
+        query: String
+    ) {
+        response.data?.run {
+            _state.value = _state.value.copy(
+                location = query,
+                weatherInfo = this,
+                isLoading = false,
+                error = null
+            )
+        }
+    }
+
+    private fun updateErrorState(errorMessage: String?) {
+        _state.value = _state.value.copy(
+            weatherInfo = null,
+            isLoading = false,
+            error = errorMessage
+        )
     }
 
     private fun getCityName(addresses: List<Address>): String =
