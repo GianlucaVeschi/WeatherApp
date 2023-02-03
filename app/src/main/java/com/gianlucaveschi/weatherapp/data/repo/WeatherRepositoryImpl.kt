@@ -18,14 +18,8 @@ class WeatherRepositoryImpl @Inject constructor(
             data = api.getWeatherData(
                 lat = lat,
                 long = long
-            )
-                .also {
-                    println("Che palle $it")
-                }
-                .toWeatherInfo()
-                .also {
-                    println("Che palle $it")
-                }
+            ).toWeatherInfo()
+
         )
     } catch (e: Exception) {
         e.printStackTrace()

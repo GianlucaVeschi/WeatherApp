@@ -28,7 +28,7 @@ class WeatherRepositoryTest : BaseJunitTest<WeatherRepository>() {
     override fun initSelf() = WeatherRepositoryImpl(openMeteoWeatherApi)
 
     @Test
-    fun `WHEN fetching weather info THEN return correct response`() = runTest {
+    fun `GIVEN correct coordinates WHEN fetching weather info THEN return correct response`() = runTest {
         val latitude = 41.40338
         val longitude = 2.17403
         coEvery {
