@@ -2,9 +2,9 @@ package com.gianlucaveschi.weatherapp.data.repo
 
 import com.gianlucaveschi.weatherapp.data.mapper.toWeatherInfo
 import com.gianlucaveschi.weatherapp.data.remote.OpenMeteoWeatherApi
-import com.gianlucaveschi.weatherapp.domain.weather.WeatherInfo
 import com.gianlucaveschi.weatherapp.domain.repo.WeatherRepository
 import com.gianlucaveschi.weatherapp.domain.util.Resource
+import com.gianlucaveschi.weatherapp.domain.weather.WeatherInfo
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -18,7 +18,14 @@ class WeatherRepositoryImpl @Inject constructor(
             data = api.getWeatherData(
                 lat = lat,
                 long = long
-            ).toWeatherInfo()
+            )
+                .also {
+                    println("Che palle $it")
+                }
+                .toWeatherInfo()
+                .also {
+                    println("Che palle $it")
+                }
         )
     } catch (e: Exception) {
         e.printStackTrace()

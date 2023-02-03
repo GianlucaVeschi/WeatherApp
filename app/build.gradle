@@ -82,4 +82,10 @@ dependencies {
 
     //swipe to refresh
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.24.13-rc'
+
+    //Mockk
+    testImplementation "io.mockk:mockk:${mockk_version}"
+    androidTestImplementation "io.mockk:mockk-android:$mockk_version"
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 }
