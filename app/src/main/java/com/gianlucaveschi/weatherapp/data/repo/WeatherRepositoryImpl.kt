@@ -11,11 +11,11 @@ class WeatherRepositoryImpl @Inject constructor(
     private val api: OpenMeteoWeatherApi
 ) : WeatherRepository {
 
-    override suspend fun getWeatherDataGen(
+    override suspend fun getWeatherData(
         lat: Double, long: Double
     ): Resource<WeatherInfo> = try {
         Resource.Success(
-            data = api.getWeatherDataGenModel(
+            data = api.getWeatherData(
                 lat = lat,
                 long = long
             ).toWeatherInfo()

@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface OpenMeteoWeatherApi {
 
     @GET(WEATHER_ENDPOINT)
-    suspend fun getWeatherDataGenModel(
+    suspend fun getWeatherData(
         @Query("latitude") lat: Double,
         @Query("longitude") long: Double
     ): WeatherDataApiResponse
