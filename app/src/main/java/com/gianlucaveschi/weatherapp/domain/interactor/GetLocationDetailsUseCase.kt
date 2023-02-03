@@ -13,16 +13,20 @@ class GetLocationDetailsUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(query: String): Resource<WeatherInfo> {
         val location: List<Address> = geocoder.getFromLocationName(query, 1)
-        return if (location.isNotEmpty()) {
-            location[0].let {
-                if (it.hasLatitude() && it.hasLongitude()) {
-                    repository.getWeatherData(it.latitude, it.longitude)
-                } else {
-                    Resource.Error("error, could not retrieve longitude and latitude")
+        return try {
+            if (location.isNotEmpty()) {
+                location[0].let {
+                    if (it.hasLatitude() && it.hasLongitude()) {
+                        repository.getWeatherData(it.latitude, it.longitude)
+                    } else {
+                        Resource.Error("error, could not retrieve longitude and latitude")
+                    }
                 }
+            } else {
+                Resource.Error("error, location is unknown")
             }
-        } else {
-            Resource.Error("error, location is unknown")
+        } catch (exception : Exception){
+            Resource.Error("error: $exception")
         }
     }
 }
