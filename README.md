@@ -1,16 +1,15 @@
 # WeatherApp
 aka: Just another coding challenge
 
-## Table Of Contents
-
-* [About the Project](#about-the-project)
-* [Built With](#built-with)
-* [Authors](#authors)
-* [Acknowledgements](#acknowledgements)
-
 ## About The Project
+Weather application built using the `https://open-meteo.com/` API.
 
-Weather application built using the `https://open-meteo.com/` API
+This android app showcases the weather forecast for the next seven days. It first fetches the data for the location of the user, but it also offers a search functionality to look for the weather in any other city in the world.
+
+I have decided to use Jetpack Compose as it is much more fun than XML. The whole project is build using MVVM and it has three layers.
+- Presentation
+- Domain
+- Data
 
 ## Built With
 
