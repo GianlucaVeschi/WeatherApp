@@ -14,7 +14,7 @@ I have decided to use Jetpack Compose as it is much more fun than XML. The whole
 ## Built With
 
 A cool modern weather application build with\
-* [Compose UI](ComposeUI)
+* [Compose UI](ComposeUI) :heavy_check_mark:
 * [coroutine](coroutine)
 * [retrofit](retrofit)
 * [MVVM](MVVM)
